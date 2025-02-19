@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "update_url": "https://teammexico7.github.io/pluginRetiros/update.json",
+  "items": [
+    {
+      "version": "1.0",
+      "update_link": "https://teammexico7.github.io/pluginRetiros/AgrupadorPestañas.xpi"
+    }
+  ]
+}
