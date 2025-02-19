@@ -1,24 +1,20 @@
-browser.browserAction.onClicked.addListener(() => {
-  reorderTabsByTitle();
+browser.contextMenus.create({
+  id: "open-links",
+  title: "Abrir Tarjetas",
+  contexts: ["link"],
 });
 
-function reorderTabsByTitle() {
-  // Obtener la ventana activa
-  browser.windows.getCurrent().then((currentWindow) => {
-    // Consultar las pestañas de la ventana activa
-    return browser.tabs.query({ windowId: currentWindow.id });
-  }).then((tabs) => {
-    // Ordenar las pestañas por título
-    tabs.sort((a, b) => {
-      const titleA = a.title ? a.title.toLowerCase() : "";
-      const titleB = b.title ? b.title.toLowerCase() : "";
-      return titleA.localeCompare(titleB);
-    });
+browser.contextMenus.onClicked.addListener(function(info, tab) {
+  const linkUrl = info.linkUrl;
+  const linkText = linkUrl.substring(linkUrl.lastIndexOf('=') + 1);
 
-    // Mover las pestañas a su nueva posición
-    const tabIds = tabs.map(tab => tab.id);
-    for (let i = 0; i < tabIds.length; i++) {
-      browser.tabs.move(tabIds[i], { index: i });
-    }
+  const urls = [
+    `https://tmbo.mx/bo/player!view?userId=${linkText}`,
+    `https://tmbo.mx/bo/playerPayments!view?userId=${linkText}`,
+    `https://tmbo.mx/bo/alarms!search?userId=${linkText}&alarmStatus=open`,
+  ];
+
+  urls.forEach((url) => {
+    browser.tabs.create({ url: url, active: false });
   });
-}
+});
